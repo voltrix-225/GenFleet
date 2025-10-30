@@ -16,7 +16,7 @@ Ultimately, GenFleet acts as a **foundation for large-scale EV data augmentation
 ## Technical Direction
 GenFleet operates on two parallel axes:
 
-1. **Synthetic Data Generation** — using the seed dataset (BMW i3 trips) to build generative models that can produce new, realistic trip profiles under varying conditions.  
+1. **Synthetic Data Generation** — using a seed dataset to build generative models that can produce new, realistic trip profiles under varying conditions.  
 2. **Predictive Modeling** — training XGBoost and similar ML models to forecast SoC consumption, trip energy, and performance metrics using combined real + synthetic datasets.
 
 Future stages will integrate these two components, allowing the generator to feed the predictor dynamically — creating a **self-evolving EV fleet simulator**.
