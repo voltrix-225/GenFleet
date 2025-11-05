@@ -1,4 +1,5 @@
 """
+week 1:
 This module automates the process of combining multiple tab-separated CSV datasets into one master file.
 It scans the dataset/ directory, reads each CSV using pandas, and merges them into a unified DataFrame.
 During preprocessing, it ensures encoding consistency, removes missing values, and drops duplicate records.
