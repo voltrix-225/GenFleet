@@ -1,66 +1,56 @@
-#  GenFleet: Synthetic EV Fleet Intelligence
 
-## Project Overview
-**GenFleet** is an AI-driven framework designed to **simulate, generate, and predict electric vehicle (EV) fleet performance** under diverse environmental and operational conditions.  
-The core aim is to bridge the data scarcity gap in EV telematics — where real-world data is limited or inconsistent — by using **synthetic data generation** combined with **machine learning prediction models**.
+# ⚡ GenFleet – EV Telemetry Analytics Dashboard
 
-By leveraging both **real trip data** and **AI-generated synthetic data**, GenFleet aspires to:
-- Model real-world driving behavior and environmental effects (temperature, elevation, speed, HVAC use).  
-- Predict key metrics such as **range**, **state-of-charge (SoC) drop**, and **battery performance**.  
-- Support **fleet operators and EV researchers** in designing efficient charging and routing strategies.  
-
-Ultimately, GenFleet acts as a **foundation for large-scale EV data augmentation and analytics**, merging generative AI with traditional regression and forecasting models.
+GenFleet is a lightweight EV analytics platform that processes real BMW i3 telemetry, performs feature engineering, trains an ML model, and displays results through a clean Flask web dashboard with a built-in EV chatbot.
 
 ---
 
-## Technical Direction
-GenFleet operates on two parallel axes:
-
-1. **Synthetic Data Generation** — using a seed dataset to build generative models that can produce new, realistic trip profiles under varying conditions.  
-2. **Predictive Modeling** — training XGBoost and similar ML models to forecast SoC consumption, trip energy, and performance metrics using combined real + synthetic datasets.
-
-Future stages will integrate these two components, allowing the generator to feed the predictor dynamically — creating a **self-evolving EV fleet simulator**.
-
----
-
-##  Week 1 — Data Acquisition & Cleaning
-**Goal:** Build a reliable, unified dataset from raw trip CSVs.
-
-###  Tasks Completed:
-- Ingested trip logs across summer (partial data) and winter (complete data) conditions.  
-- Handled tab-separated and non-UTF encodings (`\t`, `latin1`) to prevent parsing errors.  
-- Combined all trips into a single cleaned dataset **`Trip_data.csv`** with traceable file origins.  
-- Removed duplicates and missing-value rows; added basic structure for later EDA and model input preparation.  
-
-**Output:** `Trip_data.csv` — a standardized dataset ready for exploration, feature normalization, and generative modeling.
-
-## Week 2: Predictive Modeling and Visualization
-
-### Objective
-Week 2 focused on building a predictive model to estimate **instantaneous power consumption** of the BMW i3 using real driving telemetry.  
-The aim was to turn cleaned data from Week 1 into a trained model supported by analytical visualizations.
+## 🚀 Features
+* **Data Processing:** Cleans & standardizes raw tab-delimited EV telemetry
+* **Trip Detection:** Auto-splits driving sessions and generates summaries
+* **Feature Engineering:** Rolling smoothing + lag features + power calculation
+* **ML Model:** XGBoost regression to predict instantaneous power consumption
+* **Visualizations:** Velocity smoothing, power prediction accuracy, feature importance
+* **Flask UI:** Run pipeline, view plots, access chatbot
+* **Chatbot:** Answers EV-related questions (SoC, energy, heating load, model accuracy)
 
 ---
 
-### Work Summary
-- Applied **rolling mean smoothing (5 s)** to reduce signal noise.  
-- Created **lag-based features (1–3 s)** to capture short-term driving trends.  
-- Trained an **XGBoost Regressor** to predict `power_w_smoothed`.  
-- Evaluated results using **MAE (~70 W)** and **R² (~0.95)**.  
-- Visualized velocity trends, prediction accuracy, and feature importance.
+## 🏗️ Project Structure
+```
+GenFleet/
+│
+├── app.py                    # Flask server (UI + API)
+├── chatbot.py                # EV analytics rule-based chatbot
+├── data_processing.py        # Load, clean, preprocess telemetry
+├── feature_engineering.py    # Rolling smoothing + lag features
+├── model_train.py            # XGBoost model training
+├── viz.py                    # Visualization functions (Agg backend)
+├── helper.py                 # Utility helpers (sanitize, ensure_dir)
+│
+├── README.md                 # Project documentation
+├── requirements.txt          # Python dependencies
+│
+├── dataset/                  # Raw + combined telemetry files
+│     └── Trip_data.csv
+│
+├── results/                  # Trip summaries / processed outputs
+│     └── Trip_data_trip_summary.csv
+│
+├── templates/                # Flask HTML templates
+│     ├── index.html          # Dashboard UI
+│     └── chat.html           # Chat assistant UI
+│
+└── static/                   # Static assets served by Flask
+      ├── style.css           # UI styling
+      └── plots/              # Generated visualizations
+            ├── velocity.png
+            ├── power.png
+            └── importance.png
+```
 
----
 
-### Key Insights
-- **Throttle %** and **velocity** are dominant predictors of power draw.  
-- **HVAC usage** significantly impacts range efficiency.  
-- Smoothing improved model stability and interpretability.
+## Authors
 
----
-
-### Deliverables
-- Trained XGBoost model (MAE ≈ 70 W, R² ≈ 0.95)  
-- Engineered dataset (~29 k rows usable)  
-- Visualization suite for power and feature trends  
-- Fully automated pipeline (`main.py`)
+- [@voltrix-225](https://www.github.com/voltrix-225)
 
