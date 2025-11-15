@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GenFleet EV Analytics Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>⚡ GenFleet – EV Analytics Dashboard</h1>
+        <p>Analyze EV telemetry, train ML models, and visualize results.</p>
+
+        <button id="runBtn">Run Pipeline</button>
+
+        <div id="statusBox">Click RUN to start analysis.</div>
+
+        <h2>📊 Visualizations</h2>
+        <div class="plot-section">
+            <img id="velocityPlot" src="/static/plots/velocity.png" alt="Velocity Plot" />
+            <img id="powerPlot" src="/static/plots/power.png" alt="Power Prediction Plot" />
+            <img id="importancePlot" src="/static/plots/importance.png" alt="Feature Importance" />
+        </div>
+
+        <a class="chatLink" href="/chat_ui">💬 Open Chatbot</a>
+    </div>
+
+<script>
+document.getElementById("runBtn").onclick = function() {
+    document.getElementById("statusBox").innerText = "Running pipeline... Please wait.";
+
+    fetch("/run", {method: "POST"})
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                document.getElementById("statusBox").innerText = "Pipeline completed!";
+                document.getElementById("velocityPlot").src = "/static/plots/velocity.png?" + new Date().getTime();
+                document.getElementById("powerPlot").src = "/static/plots/power.png?" + new Date().getTime();
+                document.getElementById("importancePlot").src = "/static/plots/importance.png?" + new Date().getTime();
+            } else {
+                document.getElementById("statusBox").innerText = "Error: " + data.message;
+            }
+        })
+        .catch(err => {
+            document.getElementById("statusBox").innerText = "Error running pipeline.";
+        });
+};
+</script>
+</body>
+</html>

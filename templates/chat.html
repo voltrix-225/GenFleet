@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GenFleet Chat Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+<div class="container">
+    <h1>💬 GenFleet Chat Assistant</h1>
+
+    <div id="chatBox"></div>
+
+    <input type="text" id="userInput" placeholder="Ask something about EVs..." />
+    <button id="sendBtn">Send</button>
+
+    <a class="backLink" href="/">← Back to Dashboard</a>
+</div>
+
+<script>
+document.getElementById("sendBtn").onclick = sendMsg;
+document.getElementById("userInput").addEventListener("keypress", function(e){
+    if (e.key === "Enter") sendMsg();
+});
+
+function sendMsg() {
+    const msg = document.getElementById("userInput").value;
+    if (!msg) return;
+
+    addToChat("You", msg);
+    document.getElementById("userInput").value = "";
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: msg})
+    })
+    .then(res => res.json())
+    .then(data => addToChat("GenFleet", data.reply));
+}
+
+function addToChat(sender, text) {
+    const box = document.getElementById("chatBox");
+    box.innerHTML += `<div class="msg"><b>${sender}:</b> ${text}</div>`;
+    box.scrollTop = box.scrollHeight;
+}
+</script>
+</body>
+</html>
